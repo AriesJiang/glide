@@ -27,11 +27,11 @@ subprojects { project ->
         sourceCompatibility = 1.7
         targetCompatibility = 1.7
 
-        options.setBootstrapClasspath(files("${System.getProperty('java.home')}/lib/rt.jar"))
+        options.bootClasspath = "${System.getProperty('java.home')}/lib/rt.jar"
         // gifencoder is a legacy project that has a ton of warnings and is basically never
         // modified, so we're not going to worry about cleaning it up.
         if ("gifencoder" != project.getName()) {
-          options.compilerArgs \
+            options.compilerArgs \
                 << "-Xlint:all" << "-Werror" \
                 /*
                  * Java expects every annotation to have a processor, but we use
@@ -57,8 +57,6 @@ subprojects { project ->
                 lintOptions {
                     warningsAsErrors true
                     quiet true
-                    // TODO(#2730): Remove this after updating to the latest support library.
-                    disable "GradleDependency"
                 }
             }
         }
