@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.RecyclerListener;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -136,6 +137,7 @@ public class MainActivity extends Activity implements Api.Monitor {
         }
       });
 
+      Log.e("gifGlide", result.images.fixed_height.url);
       // clearOnDetach let's us stop animating GifDrawables that RecyclerView hasn't yet recycled
       // but that are currently off screen.
       requestBuilder.load(result).into(holder.gifView).clearOnDetach();

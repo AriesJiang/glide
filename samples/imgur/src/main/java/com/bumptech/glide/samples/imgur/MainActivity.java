@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +26,17 @@ import rx.schedulers.Schedulers;
 
 /**
  * Displays images and GIFs from Imgur in a scrollable list of cards.
+ * 关于glide加载gif的测试，其结果为：在gif图移出屏幕后，glide会停止该gif的动画
  */
 public final class MainActivity extends AppCompatActivity {
 
   @Inject @Named("hotViralImages") Observable<List<Image>> fetchImagesObservable;
   private ImgurImageAdapter adapter;
+
+  private String[] gif = {"https://i.imgur.com/geaXLZR.gif",
+      "https://i.imgur.com/Q74OvUP.gif",
+      "https://media2.giphy.com/media/MDd7k9STXFAEU/200.gif",
+      "https://media0.giphy.com/media/YTbZzCkRQCEJa/200.gif"};
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +96,11 @@ public final class MainActivity extends AppCompatActivity {
       vh.title.setText(
           TextUtils.isEmpty(image.title) ? image.description : image.title);
 
+      //关于glide加载gif的测试，其结果为：在gif图移出屏幕后，glide会停止该gif的动画
+      if (0 <= position && position < 4) {
+        image.link = gif[position];
+      }
+      Log.e("imageLink", image.link);
       ImgurGlide.with(vh.imageView)
           .load(image.link)
           .into(vh.imageView);
