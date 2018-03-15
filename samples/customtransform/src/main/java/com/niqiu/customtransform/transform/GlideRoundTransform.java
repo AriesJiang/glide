@@ -1,5 +1,6 @@
 package com.niqiu.customtransform.transform;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -19,6 +20,9 @@ public class GlideRoundTransform extends BitmapTransformation {
 
   private float radius = 0f;
 
+  private Paint mBorderPaint;
+  private float mBorderWidth;
+
   public GlideRoundTransform() {
     this(4);
   }
@@ -26,6 +30,18 @@ public class GlideRoundTransform extends BitmapTransformation {
   public GlideRoundTransform(int dp) {
     super();
     this.radius = Resources.getSystem().getDisplayMetrics().density * dp;
+  }
+
+  public GlideRoundTransform(Context context, int borderWidth, int borderColor) {
+    this(0);
+    mBorderWidth = Resources.getSystem().getDisplayMetrics().density * borderWidth;
+
+    mBorderPaint = new Paint();
+    mBorderPaint.setDither(true);
+    mBorderPaint.setAntiAlias(true);
+    mBorderPaint.setColor(borderColor);
+    mBorderPaint.setStyle(Paint.Style.STROKE);
+    mBorderPaint.setStrokeWidth(mBorderWidth);
   }
 
   @Override
@@ -53,6 +69,11 @@ public class GlideRoundTransform extends BitmapTransformation {
     paint.setAntiAlias(true);
     RectF rectF = new RectF(0f, 0f, source.getWidth(), source.getHeight());
     canvas.drawRoundRect(rectF, radius, radius, paint);
+
+    if (mBorderPaint != null) {
+      float borderRadius = radius - mBorderWidth / 2;
+      canvas.drawRoundRect(rectF, borderRadius, borderRadius, mBorderPaint);
+    }
     return result;
   }
 }
